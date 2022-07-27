@@ -1,6 +1,6 @@
 from notes_app.notes_helper import NotesHelper
 from notes_app.note import Note
-from database.db_helper import SQLiteConnection
+from notes_app.database.db_helper import SQLiteConnection
 import requests
 
 class NotesLogic:
@@ -17,13 +17,15 @@ class NotesLogic:
 
     def get_note_by_id(self, id):
         note = self.db.get_notes(id)
+        if not note:
+            return "Note does not exist"
         return str(Note(id=note[0], description=note[1]))
 
     def create_note(self, desc, add_date=None):
         if (add_date):
             if (add_date.lower() == "y"):
                 try:
-                    note_date = requests.get(f"http://{host}:9090/calendar")
+                    note_date = requests.get(f"http://localhost:9090/calendar")
                     note_date = note_date.text
                     desc = desc + " with date " + note_date
                     print(desc)

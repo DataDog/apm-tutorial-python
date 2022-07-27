@@ -5,10 +5,10 @@ class SQLiteConnection:
 
     def __init__(self):
         
-        self.connection = sqlite3.connect(":memory:")
+        self.connection = sqlite3.connect(":memory:", check_same_thread=False)
         cursor = self.connection.cursor()
 
-        create_table_query = '''CREATE TABLE notes (id INT PRIMARY KEY AUTOINCREMENT, description TEXT NOT NULL);'''
+        create_table_query = '''CREATE TABLE notes (id INTEGER PRIMARY KEY AUTOINCREMENT, description TEXT NOT NULL);'''
         # Execute a command: this creates a new table
         logging.info("Creating notes table.")
         try:
@@ -16,7 +16,8 @@ class SQLiteConnection:
             self.connection.commit()
             logging.info("Table created successfully in SQLite3")
             cursor.close()
-        except:
+        except Exception as e:
+            print(e)
             self.connection.rollback()
             cursor.close()
             logging.info("Table already exists.")
@@ -25,7 +26,7 @@ class SQLiteConnection:
     def create_note(self, note):
         try:
             cursor = self.connection.cursor()
-            sql = """INSERT INTO notes(description) VALUES (%s) RETURNING id;"""
+            sql = """INSERT INTO notes(description) VALUES (?) RETURNING id;"""
             cursor.execute(sql, (note.description,))
             note_id = cursor.fetchone()[0]
             self.connection.commit()
@@ -40,13 +41,14 @@ class SQLiteConnection:
     def update_note(self, note):
         try:
             cursor = self.connection.cursor()
-            sql = """UPDATE notes SET description = %s WHERE id = %s"""
+            sql = """UPDATE notes SET description = ? WHERE id = ?"""
             cursor.execute(sql, (note.description, note.id))
             self.connection.commit()
             cursor.close()
             logging.info(f"Updated note with id: {note.id}")
             return str(note)
         except Exception as e:
+            logging.error(e)
             self.connection.rollback()
             cursor.close()
 
@@ -54,7 +56,7 @@ class SQLiteConnection:
         cursor = self.connection.cursor()
         if id:
             try:
-                query = "SELECT id, description FROM notes WHERE id = %s"
+                query = "SELECT id, description FROM notes WHERE id = ?"
                 cursor.execute(query, [id])
                 note = cursor.fetchone()
                 cursor.close()
@@ -62,6 +64,7 @@ class SQLiteConnection:
             except:
                 cursor.close()
                 logging.error(f"Couldn't get note with id: {id}")
+                return None
         else:
             try:
                 query = "SELECT id, description FROM notes ORDER BY id"
@@ -72,14 +75,16 @@ class SQLiteConnection:
                 for note in notes:
                     response[note[0]] = note[1]
                 return response
-            except:
+            except Exception as e:
+                print(e)
                 cursor.close()
                 logging.error(f"Couldn't get notes")
+                return None
 
     def delete_note(self, id):
         try:
             cursor = self.connection.cursor()
-            sql = """DELETE FROM notes WHERE id = %s"""
+            sql = """DELETE FROM notes WHERE id = ?"""
             cursor.execute(sql, (id,))
             self.connection.commit()
             cursor.close()
