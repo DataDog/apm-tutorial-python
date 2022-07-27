@@ -15,27 +15,27 @@ def get_all_notes():
     return note_handler.get_all_notes()
 
 
-@app.route('/note', methods=['GET'])
+@app.route('/notes', methods=['GET'])
 def get_note():
     id = request.args.get('id')
     return note_handler.get_note_by_id(id)
 
 
-@app.route('/note', methods=['POST'])
+@app.route('/notes', methods=['POST'])
 def create_note():
     desc = request.args.get('desc')
     add_date = request.args.get('add_date')
     return note_handler.create_note(desc, add_date)
 
 
-@app.route('/note', methods=['PUT'])
+@app.route('/notes', methods=['PUT'])
 def update_note():
     id = request.args.get('id')
     desc = request.args.get('desc')
     return note_handler.update_note(id, desc)
 
 
-@app.route('/note', methods=['DELETE'])
+@app.route('/notes', methods=['DELETE'])
 def delete_note():
     id = request.args.get('id')
     return note_handler.delete_note(id)
