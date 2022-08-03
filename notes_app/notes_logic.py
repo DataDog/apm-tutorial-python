@@ -25,6 +25,7 @@ class NotesLogic:
         if (add_date):
             if (add_date.lower() == "y"):
                 try:
+                    self.nh.another_process()
                     note_date = requests.get(f"http://localhost:9090/calendar")
                     note_date = note_date.text
                     desc = desc + " with date " + note_date
