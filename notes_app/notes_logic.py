@@ -9,17 +9,17 @@ class NotesLogic:
         self.nh = NotesHelper()
         self.db = SQLiteConnection()
 
-    def get_all_notes(self):
-        notes = self.db.get_notes()
-        self.nh.long_running_process()
-        self.nh.another_process()
-        return notes
-
-    def get_note_by_id(self, id):
-        note = self.db.get_notes(id)
-        if not note:
-            return "Note does not exist"
-        return str(Note(id=note[0], description=note[1]))
+    def get_note(self, id):
+        if id:
+            note = self.db.get_notes(id)
+            if not note:
+                return "Note does not exist"
+            return str(Note(id=note[0], description=note[1]))
+        else:
+            notes = self.db.get_notes()
+            self.nh.long_running_process()
+            self.nh.another_process()
+            return notes
 
     def create_note(self, desc, add_date=None):
         if (add_date):

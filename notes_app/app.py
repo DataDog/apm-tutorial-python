@@ -11,14 +11,9 @@ def index():
 
 
 @app.route('/notes', methods=['GET'])
-def get_all_notes():
-    return note_handler.get_all_notes()
-
-
-@app.route('/notes', methods=['GET'])
-def get_note():
+def get_notes():
     id = request.args.get('id')
-    return note_handler.get_note_by_id(id)
+    return note_handler.get_note(id)
 
 
 @app.route('/notes', methods=['POST'])
