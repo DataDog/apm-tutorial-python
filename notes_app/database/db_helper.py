@@ -26,16 +26,15 @@ class SQLiteConnection:
     def create_note(self, note):
         try:
             cursor = self.connection.cursor()
-            sql = """INSERT INTO notes(description) VALUES (?) RETURNING id;"""
+            sql = """INSERT INTO notes(description) VALUES (?);"""
             cursor.execute(sql, (note.description,))
-            note_id = cursor.fetchone()[0]
             self.connection.commit()
-            cursor.close()
             logging.info(f"Created note with id: {note.id}")
-            return note_id
+            return cursor.lastrowid
         except Exception as e:
             logging.error(e)
             self.connection.rollback()
+        finally:
             cursor.close()
 
     def update_note(self, note):
