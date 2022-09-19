@@ -1,0 +1,19 @@
+FROM python:3
+
+ENV DD_SERVICE="notes"
+ENV DD_ENV="dev"
+ENV DD_VERSION="0.1.0"
+
+LABEL com.datadoghq.tags.service="notes"
+LABEL com.datadoghq.tags.env="dev"
+LABEL com.datadoghq.tags.version="0.1.0"
+
+WORKDIR /home
+
+COPY requirements.txt /home
+COPY notes_app /home/notes_app
+
+RUN pip install -r requirements.txt
+
+# Run the application with Datadog 
+CMD ["ddtrace-run", "python", "-m", "notes_app.app"]

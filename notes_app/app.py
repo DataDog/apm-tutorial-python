@@ -1,6 +1,6 @@
 from notes_app.notes_logic import NotesLogic
-
 from flask import Flask, request
+
 app = Flask(__name__)
 
 note_handler = NotesLogic()

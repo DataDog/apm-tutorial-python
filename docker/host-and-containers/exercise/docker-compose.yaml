@@ -1,0 +1,30 @@
+version: "3"
+services:
+  db:
+    container_name: test_postgres
+    image: "postgres"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: testdb
+      POSTGRES_HOST_AUTH_METHOD: trust 
+  notes_app:
+    container_name: notes
+    restart: always
+    build:
+      context: ../../..
+      dockerfile: docker/containers/exercise/Dockerfile.notes
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=test_postgres         # References the Postgres container
+      - CALENDAR_HOST=calendar    # References the calendar container
+  calendar_app:
+    container_name: calendar
+    restart: always
+    build:
+      context: ../../..
+      dockerfile: docker/containers/exercise/Dockerfile.calendar
+    ports:
+      - "9090:9090"

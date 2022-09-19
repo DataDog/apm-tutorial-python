@@ -1,13 +1,20 @@
 from notes_app.notes_helper import NotesHelper
 from notes_app.note import Note
-from notes_app.database.db_helper import SQLiteConnection
+from notes_app.database.sqllite_connection import SQLiteConnection
+from notes_app.database.postgres_connection import PostgresConnection
 import requests
+import os
+
+CALENDAR_HOST = os.getenv('CALENDAR_HOST', 'localhost')
 
 class NotesLogic:
     
     def __init__(self):
         self.nh = NotesHelper()
-        self.db = SQLiteConnection()
+        if os.getenv('DB_HOST') != None:
+            self.db = PostgresConnection()
+        else:
+            self.db = SQLiteConnection()
 
     def get_note(self, id):
         if id:
@@ -26,7 +33,7 @@ class NotesLogic:
             if (add_date.lower() == "y"):
                 try:
                     self.nh.another_process()
-                    note_date = requests.get(f"http://localhost:9090/calendar")
+                    note_date = requests.get(f"http://{CALENDAR_HOST}:9090/calendar")
                     note_date = note_date.text
                     desc = desc + " with date " + note_date
                     print(desc)

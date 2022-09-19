@@ -1,0 +1,47 @@
+version: "3"
+services:
+  datadog:
+    container_name: dd-agent
+    image: "gcr.io/datadoghq/agent:latest"
+    environment:
+      - DD_API_KEY=<DD_API_KEY>
+      - DD_SITE=datadoghq.com  # Defaults to 'datadoghq.com'. Customers outside North America should use their correct Datadog Domain
+      - DD_APM_ENABLED=true    # Enable APM
+    volumes: 
+      - /var/run/docker.sock:/var/run/docker.sock:ro 
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+
+  calendar_app:
+    container_name: calendar
+    restart: always
+    build:
+      context: ../../..
+      dockerfile: docker/containers/solution/Dockerfile.calendar
+    ports:
+      - "9090:9090"
+    environment:
+      - DD_AGENT_HOST=datadog # Should reference the service name of the Datadog agent container in this docker-compose
+
+  notes_app:
+    container_name: notes
+    restart: always
+    build:
+      context: ../../..
+      dockerfile: docker/containers/solution/Dockerfile.notes
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=test_postgres       # References the Postgres container
+      - CALENDAR_HOST=calendar      # References the calendar container
+      - DD_AGENT_HOST=datadog       # Should reference the service name of the Datadog agent container in this docker-compose
+
+  db:
+    container_name: test_postgres
+    image: "postgres"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: testdb
+      POSTGRES_HOST_AUTH_METHOD: trust 
