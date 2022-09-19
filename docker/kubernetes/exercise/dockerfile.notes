@@ -1,0 +1,11 @@
+FROM python:3
+
+WORKDIR /home
+
+COPY requirements.txt /home
+COPY notes_app /home/notes_app
+
+RUN pip install -r requirements.txt
+
+# Runs the application without Datadog
+CMD ["python", "-m", "notes_app.app"]

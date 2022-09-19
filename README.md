@@ -1,10 +1,15 @@
 # apm-tutorial-python-host
 
-The notes application is a REST API available on 'localhost:8080'. The calendar application is also a REST API, and it's available on 'localhost:9090'. Additionally, the notes application POST /notes method has an additional parameters, add_date, that can be set to 'y' in order to make a call to the calendar application for a random date. This can be used to show distributed tracing across applications.
+The notes application and calendar application are both REST API's. The notes application has POST, GET, PUT and DELETE operations for creating, getting, updating and deleting notes. Additionally, the notes application POST /notes method has an additional parameters, add_date, that can be set to 'y' in order to make a call to the calendar application for a random date. This can be used to show distributed tracing across applications.
 
-This is a sample Python application made to run on your local machine with two different services, a notes application and calendar application, in order to provide sample distributed tracing. The application is used in a tutorial showcasing how to enable APM tracing for an application running locally with the Datadog Agent also running locally.
+This is a sample Python application made to run in various deployment scenarios with two different services, a notes application and calendar application, in order to provide sample distributed tracing. The application is used in a tutorial showcasing how to enable APM tracing for an application. The different ways to deploy these applications are:
+    - locally on host machine (with Datadog Agent also running on host)
+    - within Docker containers (with Datadog Agent also in a container)
+    - within Docker containers (with Datadog Agent running on host)
+    - Google Kubernetes Engine (GKE)
+    - Amazon AWS Elastic Kubernetes Service (AWS EKS)
 
-The sample application is a very simple pair of rest APIs, as seen below:
+The sample application is a very simple pair of rest APIs, as seen below. All commands below are for host and/or Docker container deployment situations. For Kubernetes deployments, the URL will be that of the Kubernetes notes or calendar service. 
 
 # REST APIs
 

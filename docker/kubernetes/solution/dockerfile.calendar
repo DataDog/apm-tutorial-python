@@ -1,0 +1,11 @@
+FROM python:3
+
+WORKDIR /home
+
+COPY requirements.txt /home
+COPY calendar_app /home/calendar_app
+
+RUN pip install -r requirements.txt
+
+# Runs the application with Datadog agent and tracing
+CMD ["ddtrace-run", "python", "-m", "calendar_app.app"] 
