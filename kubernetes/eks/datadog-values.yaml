@@ -1,0 +1,14 @@
+targetSystem: "linux"
+clusterAgent:
+  replicas: 2
+  createPodDisruptionBudget: true
+  admissionController:
+    enabled: true
+    mutateUnlabelled: true
+datadog:
+  apiKeyExistingSecret: datadog-secret
+  appKeyExistingSecret: datadog-secret
+  apm:
+    portEnabled: true
+  networkMonitoring:
+    enabled: true
