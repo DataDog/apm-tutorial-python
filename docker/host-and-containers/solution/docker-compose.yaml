@@ -17,8 +17,8 @@ services:
       - "8080:8080"
     depends_on:
       - db
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    # extra_hosts:                             # Linux only configuration 
+    #   - "host.docker.internal:host-gateway"  # Linux only configuration
     environment:
       - DB_HOST=test_postgres                 # References the Postgres container
       - CALENDAR_HOST=calendar                # References the calendar container
@@ -31,7 +31,7 @@ services:
       dockerfile: docker/containers/solution/Dockerfile.calendar
     ports:
       - "9090:9090"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    # extra_hosts:                             # Linux only configuration 
+    #   - "host.docker.internal:host-gateway"  # Linux only configuration
     environment:
       - DD_AGENT_HOST=host.docker.internal # Should reference the Agent running on the local machine using docker network
