@@ -1,4 +1,4 @@
-# apm-tutorial-python-host
+# apm-tutorial-python
 
 The notes application and calendar application are both REST API's. The notes application has POST, GET, PUT and DELETE operations for creating, getting, updating and deleting notes. Additionally, the notes application POST /notes method has an additional parameters, add_date, that can be set to 'y' in order to make a call to the calendar application for a random date. This can be used to show distributed tracing across applications.
 
