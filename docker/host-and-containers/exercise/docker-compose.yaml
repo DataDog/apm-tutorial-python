@@ -12,19 +12,19 @@ services:
     restart: always
     build:
       context: ../../..
-      dockerfile: docker/containers/exercise/Dockerfile.notes
+      dockerfile: docker/host-and-containers/exercise/Dockerfile.notes
     ports:
       - "8080:8080"
     depends_on:
       - db
     environment:
-      - DB_HOST=test_postgres         # References the Postgres container
-      - CALENDAR_HOST=calendar    # References the calendar container
+      - DB_HOST=test_postgres                # References the Postgres container
+      - CALENDAR_HOST=calendar               # References the calendar container
   calendar_app:
     container_name: calendar
     restart: always
     build:
       context: ../../..
-      dockerfile: docker/containers/exercise/Dockerfile.calendar
+      dockerfile: docker/host-and-containers/exercise/Dockerfile.calendar
     ports:
       - "9090:9090"

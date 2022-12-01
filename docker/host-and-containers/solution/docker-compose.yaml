@@ -12,7 +12,7 @@ services:
     restart: always
     build:
       context: ../../..
-      dockerfile: docker/containers/solution/Dockerfile.notes
+      dockerfile: docker/host-and-containers/solution/Dockerfile.notes
     ports:
       - "8080:8080"
     depends_on:
@@ -28,7 +28,7 @@ services:
     restart: always
     build:
       context: ../../..
-      dockerfile: docker/containers/solution/Dockerfile.calendar
+      dockerfile: docker/host-and-containers/solution/Dockerfile.calendar
     ports:
       - "9090:9090"
     # extra_hosts:                             # Linux only configuration 
