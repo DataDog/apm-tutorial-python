@@ -1,14 +1,20 @@
+# Unless explicitly stated otherwise all files in this repository are dual-licensed
+# under the Apache 2.0 or BSD3 Licenses.
+#
+# This product includes software developed at Datadog (https://www.datadoghq.com/)
+# Copyright 2022 Datadog, Inc.
 import psycopg2
 import logging
 import os
+
 
 class PostgresConnection:
 
     def __init__(self):
         host = os.getenv("DB_HOST")
         self.connection = psycopg2.connect(
-            host=host, 
-            port="5432", 
+            host=host,
+            port="5432",
             database="testdb",
             user="postgres",
             password="password"
@@ -28,8 +34,6 @@ class PostgresConnection:
             self.connection.rollback()
             cursor.close()
             logging.info("Table already exists.")
-
-
 
     def create_note(self, note):
         try:
@@ -98,4 +102,3 @@ class PostgresConnection:
         except:
             self.connection.rollback()
             cursor.close()
-        

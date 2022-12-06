@@ -1,3 +1,8 @@
+# Unless explicitly stated otherwise all files in this repository are dual-licensed
+# under the Apache 2.0 or BSD3 Licenses.
+#
+# This product includes software developed at Datadog (https://www.datadoghq.com/)
+# Copyright 2022 Datadog, Inc.
 from notes_app.notes_helper import NotesHelper
 from notes_app.note import Note
 from notes_app.database.sqllite_connection import SQLiteConnection
@@ -7,11 +12,12 @@ import os
 
 CALENDAR_HOST = os.getenv('CALENDAR_HOST', 'localhost')
 
+
 class NotesLogic:
-    
+
     def __init__(self):
         self.nh = NotesHelper()
-        if os.getenv('DB_HOST') != None:
+        if os.getenv('DB_HOST') is not None:
             self.db = PostgresConnection()
         else:
             self.db = SQLiteConnection()
@@ -29,8 +35,8 @@ class NotesLogic:
             return notes
 
     def create_note(self, desc, add_date=None):
-        if (add_date):
-            if (add_date.lower() == "y"):
+        if add_date:
+            if add_date.lower() == "y":
                 try:
                     self.nh.another_process()
                     note_date = requests.get(f"http://{CALENDAR_HOST}:9090/calendar")
@@ -43,14 +49,11 @@ class NotesLogic:
         note = Note(description=desc, id=None)
         note.id = self.db.create_note(note)
         return str(note)
-        
+
     def update_note(self, id, desc):
         note = Note(desc, id)
         return self.db.update_note(note)
-        
 
     def delete_note(self, id):
         self.db.delete_note(id)
         return "Deleted"
-
-
