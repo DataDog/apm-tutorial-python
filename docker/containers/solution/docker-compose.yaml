@@ -16,6 +16,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro 
       - /proc/:/host/proc/:ro
       - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   calendar_app:
     container_name: calendar
@@ -37,7 +42,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       - DB_HOST=test_postgres       # References the Postgres container
       - CALENDAR_HOST=calendar      # References the calendar container
