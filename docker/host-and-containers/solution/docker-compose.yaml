@@ -12,6 +12,12 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: testdb
       POSTGRES_HOST_AUTH_METHOD: trust 
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   notes_app:
     container_name: notes
     restart: always
@@ -21,7 +27,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     # extra_hosts:                             # Linux only configuration 
     #   - "host.docker.internal:host-gateway"  # Linux only configuration
     environment:
